@@ -5,31 +5,54 @@
 //  Created by Stuart Moore on 1/12/22.
 //
 
+import UIKit
 import XCTest
+@testable import LinkGesture
+
+private let mockBounds = CGRect(x: 0, y: 0, width: 400, height: 400)
+private let mockRect = CGRect(x: 1, y: 2, width: 3, height: 4)
+
+private class MockAccessibilityContainer: UILabel {
+    //
+}
+
+private class MockLinkFinder: LinkFinder {
+
+    var callCount = 0
+
+    func findLinkRect(for: Int) -> CGRect? {
+        callCount += 1
+        return mockRect
+    }
+}
 
 class LinkGestureAccessibilityElementTests: XCTestCase {
 
-    override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+    private let mockAccessibilityContainer = MockAccessibilityContainer(frame: mockBounds)
+    private let mockLinkFinder = MockLinkFinder()
+
+    func testMainElement() throws {
+        let accessibilityElement = LinkGestureAccessibilityElement(accessibilityContainer: mockAccessibilityContainer)
+        accessibilityElement.linkFinder = mockLinkFinder
+        accessibilityElement.linkIndex = nil
+
+        XCTAssertEqual(mockLinkFinder.callCount, 0)
+        XCTAssertEqual(accessibilityElement.accessibilityFrameInContainerSpace, mockBounds)
+        XCTAssertEqual(mockLinkFinder.callCount, 0)
+        XCTAssertEqual(accessibilityElement.accessibilityFrameInContainerSpace, mockBounds)
+        XCTAssertEqual(mockLinkFinder.callCount, 0)
     }
 
-    override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-    }
+    func testIndexedElement() throws {
+        let accessibilityElement = LinkGestureAccessibilityElement(accessibilityContainer: mockAccessibilityContainer)
+        accessibilityElement.linkFinder = mockLinkFinder
+        accessibilityElement.linkIndex = 0
 
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-        // Any test you write for XCTest can be annotated as throws and async.
-        // Mark your test throws to produce an unexpected failure when your test encounters an uncaught error.
-        // Mark your test async to allow awaiting for asynchronous code to complete. Check the results with assertions afterwards.
-    }
-
-    func testPerformanceExample() throws {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
-        }
+        XCTAssertEqual(mockLinkFinder.callCount, 0)
+        XCTAssertEqual(accessibilityElement.accessibilityFrameInContainerSpace, mockRect)
+        XCTAssertEqual(mockLinkFinder.callCount, 1)
+        XCTAssertEqual(accessibilityElement.accessibilityFrameInContainerSpace, mockRect)
+        XCTAssertEqual(mockLinkFinder.callCount, 1)
     }
 
 }

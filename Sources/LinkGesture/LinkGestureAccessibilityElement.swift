@@ -1,20 +1,25 @@
-//  Copyright © 2022 CapitalOne. All rights reserved.
+//
+//  LinkGestureAccessibilityElement.swift
+//
+//
+//  Created by Stuart Moore on 1/12/22.
+//
 
 import UIKit
 
 /// A simple protocol to mask the full gesture recognizer from `LinkGestureAccessibilityElement`.
-internal protocol InlineLinkFinder: AnyObject {
-    func findInlineLinkRect(for: Int) -> CGRect?
+internal protocol LinkFinder: AnyObject {
+    func findLinkRect(for: Int) -> CGRect?
 }
 
 /// An accessibility element capturing the link’s index in order to defer the rect calculation until called upon.
 internal class LinkGestureAccessibilityElement: UIAccessibilityElement {
 
-    /// The parent object that can find the inline link’s rect.
-    weak var inlineLinkFinder: InlineLinkFinder?
+    /// The parent object that can find the link’s rect.
+    weak var linkFinder: LinkFinder?
 
-    /// The index of the inline link this element represents.
-    var inlineLinkIndex: Int?
+    /// The index of the link this element represents.
+    var linkIndex: Int?
 
     /// If `null` (the default), calling this will calculate the rect of the represented link.
     override var accessibilityFrameInContainerSpace: CGRect {
@@ -29,8 +34,8 @@ internal class LinkGestureAccessibilityElement: UIAccessibilityElement {
                 super.accessibilityFrameInContainerSpace = newValue
             }
 
-            if let inlineLinkIndex = inlineLinkIndex {
-                newValue = inlineLinkFinder?.findInlineLinkRect(for: inlineLinkIndex) ?? .null
+            if let linkIndex = linkIndex {
+                newValue = linkFinder?.findLinkRect(for: linkIndex) ?? .null
             } else {
                 newValue = (accessibilityContainer as? UILabel)?.bounds ?? .null
             }
