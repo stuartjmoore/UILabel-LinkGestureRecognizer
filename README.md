@@ -6,7 +6,7 @@ On touch down, the link text color will be set to the corresponding `NSAttribute
 
 ## Usage
 
-```
+```swift
 let label = UILabel()
 label.attributedText = // An attributed string with inline link ranges
 
@@ -20,7 +20,7 @@ label.addGestureRecognizer(linkGestureRecognizer)
 
 The label’s `attributedText` can either be an `NSAttributedString` marked with an `inlineLink` key set as the `URL` and `highlightColor` set as the `UIColor` for decorating the link when tapped:
 
-```
+```swift
 let mutableString = NSMutableAttributedString(string: "This is a ", attributes: [
     .foregroundColor: UIColor.label,
 ])
@@ -41,7 +41,7 @@ label.attributedText = mutableString
 
 Or one built using `AttributedString` (iOS 15+) with the same keys scoped to `\.linkGesture`:
 
-```
+```swift
 var attributedString = AttributedString("This is a ")
 attributedString.foregroundColor = .label
 
@@ -57,7 +57,7 @@ attributedTerminationString.foregroundColor = .label
 label.attributedText = try? NSAttributedString(attributedString + attributedLinkString + attributedTerminationString, including: \.linkGesture)
 ```
 
-## How it works
+## How it works 🦆
 
 The method is similar to the one used by the game “Duck Hunt”. When we want to find what links exist where, we temporarily change the attributed string’s foreground and background colors’ RGB values to the index of the link it covers; the rest is set to white. From that rendered layer, we extract the color of the pixel where the touch happened, lookup the index in a table, and retrieve the UTF-16 range of the link. To speed up later touches, the rendered layer is cached until the string is modified or the label’s size changes.
 
@@ -71,15 +71,15 @@ If you want to implement your own accessibility label, `overridesAccessibility` 
 
 A basic link:
 
-!(Link Screenshot)[/Images/demo-link.png]
+![Link Screenshot](/Images/demo-link.png)
 
 When tapped:
 
-!(Tapped Link Screenshot)[/Images/demo-link-highlight.png]
+![Tapped Link Screenshot](/Images/demo-link-highlight.png)
 
 The internal “Duck Hunt” rendered layer:
 
-!(Rendered Layer)[/Images/demo-link-render.png]
+![Rendered Layer](/Images/demo-link-render.png)
 
 ## FAQ
 
