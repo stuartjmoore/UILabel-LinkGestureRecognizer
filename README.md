@@ -71,11 +71,11 @@ If you want to implement your own accessibility label, `overridesAccessibility` 
 
 A basic link:
 
-![Link Screenshot](/Images/demo-link.png)
+![Link Screenshot](/Images/demo-link.png | width=320)
 
 When tapped:
 
-![Tapped Link Screenshot](/Images/demo-link-highlight.png)
+![Tapped Link Screenshot](/Images/demo-link-highlight.png | width=320)
 
 The internal “Duck Hunt” rendered layer:
 
